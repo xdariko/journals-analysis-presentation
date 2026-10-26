@@ -1,0 +1,173 @@
+/* Тетрадный стиль: белые листы, тёмный текст, яркие плотные акценты.
+   Без полупрозрачности, размытия и бледных цветов — чтобы читалось на слабом проекторе. */
+:root{
+  --desk:#dfe7f0;        /* «парта» под листами */
+  --grid:#c9d6e6;        /* клетка на фоне */
+  --paper:#ffffff;
+  --ink:#111827;         /* основной текст */
+  --soft:#2f3a4d;        /* второстепенный текст — всё ещё тёмный */
+  --pen:#1f4fbf;         /* синяя ручка */
+  --red:#d32f2f;         /* красные поля и пометки */
+  --marker:#ffe14d;      /* жёлтый маркер */
+  --green:#1b7a3a;
+  --line:#111827;        /* обводка листов и карточек */
+  --card:#f3f6fb;
+  --hand:'Segoe Print','Comic Sans MS','Bradley Hand',cursive;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;overflow:hidden;color:var(--ink);
+  font-family:'Segoe UI',Arial,'Helvetica Neue',sans-serif;
+  background-color:var(--desk);
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:32px 32px}
+
+/* ---------- лист ---------- */
+#impress{counter-reset:page}
+.step{position:relative;width:1200px;height:680px;opacity:.35;transition:opacity .8s ease}
+.step.active,.impress-on-overview .step{opacity:1}
+.impress-on-overview .step{cursor:pointer}
+#overview{width:10px;height:10px;opacity:0!important}
+
+.slide{counter-increment:page;
+  padding:44px 64px 44px 112px;background:var(--paper);
+  border:4px solid var(--line);border-radius:8px;box-shadow:12px 12px 0 var(--line);
+  display:flex;flex-direction:column;justify-content:center;gap:18px}
+/* красные поля, как в тетради */
+.slide::before{content:"";position:absolute;left:80px;top:0;bottom:0;width:3px;background:var(--red)}
+/* номер страницы от руки */
+.slide::after{content:"стр. " counter(page);position:absolute;right:28px;bottom:14px;
+  font:22px var(--hand);color:var(--soft)}
+
+h1,h2,h3{margin:0;line-height:1.1}
+h1{font-size:76px;font-weight:800;letter-spacing:-.01em}
+h2{font-size:52px;font-weight:800}
+h3{font-size:30px;font-weight:700;color:var(--pen)}
+p{margin:0;font-size:28px;line-height:1.4}
+.lead{font-size:32px}
+.soft{color:var(--soft)}
+.small{font-size:22px}
+b{font-weight:700}
+
+/* пометка от руки над заголовком */
+.kicker{font:28px var(--hand);color:var(--red);margin:0}
+/* жёлтый маркер */
+mark{background:linear-gradient(transparent 12%,var(--marker) 12%,var(--marker) 92%,transparent 92%);
+  color:inherit;padding:0 .12em}
+/* подчёркивание ручкой */
+.u{text-decoration:underline;text-decoration-color:var(--pen);text-decoration-thickness:4px;text-underline-offset:6px}
+
+/* скотч на углах листа */
+.tape{position:absolute;width:150px;height:40px;background:#ffe9a8;border:2px solid #c9a93a}
+.tape.tl{left:-30px;top:18px;rotate:-35deg}
+.tape.tr{right:-30px;top:18px;rotate:35deg}
+
+/* ---------- титул и главы ---------- */
+.slide-title h1{max-width:900px}
+.slide-title .lead{color:var(--pen);font-weight:600}
+.author{margin-top:24px;font:28px var(--hand);color:var(--soft)}
+.chapter{background:var(--pen);border-color:var(--line)}
+.chapter::before{background:var(--marker)}
+.chapter::after{color:#fff}
+.chapter h1,.chapter p{color:#fff}
+.chapter .kicker{color:var(--marker)}
+.chapter .num{position:absolute;right:70px;top:30px;font:800 220px/1 'Segoe UI',Arial,sans-serif;color:#fff;opacity:.2}
+
+/* ---------- списки и карточки ---------- */
+.list{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:12px}
+.list li{position:relative;padding-left:40px;font-size:28px;line-height:1.35}
+.list li::before{content:"";position:absolute;left:4px;top:.38em;width:18px;height:18px;border:4px solid var(--pen);border-radius:50%}
+.list.tight{gap:8px}
+.list.tight li{font-size:25px}
+
+.plan{counter-reset:q;margin:0;padding:0;list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:14px 40px}
+.plan li{counter-increment:q;display:flex;align-items:center;gap:16px;font-size:28px;font-weight:600}
+.plan li::before{content:counter(q);flex:none;display:grid;place-items:center;width:52px;height:52px;
+  border:4px solid var(--line);border-radius:50%;background:var(--marker);font-size:26px;font-weight:800}
+
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:28px}
+.cols3{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+.card{border:4px solid var(--line);border-radius:12px;padding:20px 24px;background:var(--card);
+  display:flex;flex-direction:column;gap:10px}
+.card h3{font-size:30px}
+.card.free{background:#e6f5ea;border-color:var(--green)}
+.card.free h3{color:var(--green)}
+.card.paid{background:#fdeaea;border-color:var(--red)}
+.card.paid h3{color:var(--red)}
+.card.note{background:#fff7cc}
+
+/* таблица «вопрос — ответ» */
+.facts{display:grid;grid-template-columns:260px 1fr;gap:0;border-top:3px solid var(--line)}
+.facts dt,.facts dd{margin:0;padding:10px 0;border-bottom:2px solid #b7c3d4;font-size:26px;line-height:1.3}
+.facts dt{font-weight:700;color:var(--pen)}
+
+/* метки «есть / нет» — всегда значок + слово, не только цвет */
+.badges{display:flex;flex-wrap:wrap;gap:12px}
+.badge{display:inline-flex;align-items:center;gap:8px;padding:8px 16px;border:3px solid;border-radius:999px;
+  font-size:24px;font-weight:700;background:#fff}
+.badge.yes{color:var(--green);border-color:var(--green)}
+.badge.yes::before{content:"✔"}
+.badge.no{color:var(--red);border-color:var(--red)}
+.badge.no::before{content:"✘"}
+
+.tags{display:flex;flex-wrap:wrap;gap:10px}
+.tags span{padding:6px 14px;border:3px solid var(--line);border-radius:8px;font-size:23px;font-weight:600;background:#fff}
+.tags span.hot{background:var(--marker)}
+
+/* крупные цифры */
+.stats{display:flex;gap:22px}
+.stat{flex:1;border:4px solid var(--line);border-radius:12px;padding:16px 20px;background:#fff;box-shadow:6px 6px 0 var(--line)}
+.stat b{display:block;font-size:64px;line-height:1;font-weight:800;color:var(--pen)}
+.stat span{display:block;margin-top:8px;font-size:22px;line-height:1.3}
+.stat.red b{color:var(--red)}
+
+/* ---------- схемы ---------- */
+/* цикл агента */
+.cycle{display:flex;align-items:stretch;gap:0}
+.cycle .st{flex:1;border:4px solid var(--line);border-radius:12px;padding:14px 16px;background:#fff;text-align:center}
+.cycle .st b{display:block;font-size:26px;color:var(--pen)}
+.cycle .st span{display:block;margin-top:4px;font-size:21px;line-height:1.25}
+.cycle .ar{flex:none;align-self:center;width:44px;text-align:center;font-size:40px;font-weight:800}
+.loop{margin-top:6px;text-align:center;font-size:26px;font-weight:700;color:var(--pen)}
+
+/* конвейер обработки изображения */
+.pipe{counter-reset:p;display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.pipe div{counter-increment:p;position:relative;border:4px solid var(--line);border-radius:12px;padding:12px 14px 12px 60px;background:#fff;font-size:22px;line-height:1.25}
+.pipe div::before{content:counter(p);position:absolute;left:12px;top:12px;display:grid;place-items:center;width:36px;height:36px;
+  border-radius:50%;background:var(--pen);color:#fff;font-weight:800;font-size:22px}
+.pipe div b{display:block;font-size:24px}
+
+/* стадии роста кристалла */
+.stages{display:flex;gap:10px;align-items:flex-end}
+.stages div{flex:1;text-align:center;font-size:22px;font-weight:600}
+.stages svg{display:block;margin:0 auto 4px;height:76px}
+
+/* ---------- график выпусков ---------- */
+.chart{display:block;width:100%;height:auto}
+.chart .grid{stroke:#c3ccd8;stroke-width:2}
+.chart .axis{font:20px 'Segoe UI',Arial,sans-serif;fill:var(--soft)}
+.chart .bar{fill:var(--pen)}
+.chart .bar:hover{fill:#163a8f}
+.chart .zero{fill:none;stroke:var(--red);stroke-width:3;stroke-dasharray:8 6}
+.chart .plan-line{stroke:var(--red);stroke-width:4;stroke-dasharray:14 8}
+.chart .lbl{font:700 22px 'Segoe UI',Arial,sans-serif;fill:var(--ink)}
+.chart .lbl-red{font:700 22px 'Segoe UI',Arial,sans-serif;fill:var(--red)}
+
+/* ---------- сравнительная таблица ---------- */
+.cmp{width:100%;border-collapse:collapse;font-size:23px;line-height:1.25}
+.cmp th,.cmp td{border:3px solid var(--line);padding:7px 12px;text-align:left;vertical-align:top}
+.cmp thead th{background:var(--pen);color:#fff;font-size:24px}
+.cmp tbody th{background:var(--card);font-weight:700;width:230px}
+.cmp .win{background:#e6f5ea}
+.cmp .lose{background:#fdeaea}
+
+/* ---------- служебное ---------- */
+.progress{position:fixed;left:0;right:0;bottom:0;height:8px;z-index:20;background:#fff;border-top:2px solid var(--line)}
+.progress div{height:100%;width:0;background:var(--red);transition:width .6s ease}
+.hint{position:fixed;left:16px;bottom:16px;z-index:20;font:18px var(--hand);color:var(--soft)}
+
+.fallback-message{display:none}
+.impress-not-supported{overflow:auto}
+.impress-not-supported .fallback-message{display:block;padding:16px;font-size:20px}
+.impress-not-supported .step{opacity:1;margin:24px auto;transform:none!important}
+
+@media (prefers-reduced-motion:reduce){.step{transition:none}}
